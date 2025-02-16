@@ -8,7 +8,7 @@ from torch.utils.data import DataLoader, TensorDataset
 from flask import Flask, request, jsonify
 
 # 设备选择
-device = torch.device("cuda")
+device = torch.device("cpu")
 
 # 定义 Config（与训练时保持一致）
 class Config:
@@ -68,7 +68,7 @@ def tslib_data_loader(window, length_size, batch_size, data, data_mark):
 
 # 加载模型
 model = Informer.Model(config).to(device)
-model.load_state_dict(torch.load("best_model.pth"))
+model.load_state_dict(torch.load("best_model.pth",map_location=torch.device('cpu')))
 model.eval()
 scaler = joblib.load("scaler.save")
 
@@ -80,7 +80,6 @@ def predict():
     # 将数据转换为 DataFrame
     df = pd.DataFrame(data['data'])
 
-    print(df)
 
     data_target = df['Target']
     data = df[df.columns.drop('date')]
