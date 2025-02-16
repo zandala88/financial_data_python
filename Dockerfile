@@ -7,8 +7,6 @@ WORKDIR /app
 # 复制项目文件
 COPY . /app
 
-COPY ../myenv.tar.gz /app/myenv.tar.gz
-
 # 解压 Conda 环境
 RUN mkdir -p /opt/conda/envs/myenv && \
     tar -xzf /app/myenv.tar.gz -C /opt/conda/envs/myenv && \
