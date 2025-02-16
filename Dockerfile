@@ -12,8 +12,9 @@ RUN mkdir -p /opt/conda/envs/myenv && \
     tar -xzf /app/myenv.tar.gz -C /opt/conda/envs/myenv && \
     rm /app/myenv.tar.gz
 
-RUN conda run -n myenv pip install --no-cache-dir -r /app/requirements.txt && \
-    rm /app/requirements.txt \
+RUN conda run -n myenv pip install --no-cache-dir -r /app/requirements.txt
+
+RUN rm /app/requirements.txt
 
 # 设置默认 shell 以激活 Conda 环境
 SHELL ["/bin/bash", "-c"]
