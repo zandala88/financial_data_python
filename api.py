@@ -101,14 +101,12 @@ class PredictorServicer(predict_pb2_grpc.PredictorServicer):
 
         test_loader, x_test, y_test, x_test_mark, y_test_mark = tslib_data_loader(30, 1, 32, data_inverse, data_stamp)
 
-        pred = model(x_test, x_test_mark, y_test, y_test_mark)
+        pred = model(x_test.to(device), x_test_mark.to(device), y_test.to(device), y_test_mark.to(device))
         pred = pred.detach().cpu()
 
         pred = pred[:, :, -1]
-        print(pred.shape)
         scaler.fit_transform(np.array(data_target).reshape(-1, 1))
         pred_uninverse = scaler.inverse_transform(pred[:, -1:])
-        print(pred_uninverse.shape)
 
         predicted_value = pred_uninverse[0] if pred_uninverse.ndim == 1 else pred_uninverse[0][0]
 
