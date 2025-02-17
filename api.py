@@ -108,14 +108,7 @@ class PredictorServicer(predict_pb2_grpc.PredictorServicer):
         scaler.fit_transform(np.array(data_target).reshape(-1, 1))
         pred_uninverse = scaler.inverse_transform(pred[:, -1:])
 
-        if len(pred_uninverse) == 0:
-            return predict_pb2.PredictResponse(val=0)
-
-        if len(pred_uninverse[0]) == 0:
-            return predict_pb2.PredictResponse(val=0)
-
-        # 获取预测值
-        predicted_value = pred_uninverse[0][0]
+        predicted_value = pred_uninverse[0] if pred_uninverse.ndim == 1 else pred_uninverse[0][0]
 
         return predict_pb2.PredictResponse(val=predicted_value)
 
