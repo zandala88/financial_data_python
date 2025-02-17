@@ -101,7 +101,7 @@ class PredictorServicer(predict_pb2_grpc.PredictorServicer):
 
         test_loader, x_test, y_test, x_test_mark, y_test_mark = tslib_data_loader(30, 1, 32, data_inverse, data_stamp)
 
-        pred = model(x_test.to(device), x_test_mark.to(device), y_test.to(device), y_test_mark.to(device))
+        pred = model(x_test, x_test_mark, y_test, y_test_mark)
         pred = pred.detach().cpu()
 
         pred = pred[:, :, -1]
