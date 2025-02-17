@@ -105,8 +105,10 @@ class PredictorServicer(predict_pb2_grpc.PredictorServicer):
         pred = pred.detach().cpu()
 
         pred = pred[:, :, -1]
+        print(pred.shape)
         scaler.fit_transform(np.array(data_target).reshape(-1, 1))
         pred_uninverse = scaler.inverse_transform(pred[:, -1:])
+        print(pred_uninverse.shape)
 
         predicted_value = pred_uninverse[0] if pred_uninverse.ndim == 1 else pred_uninverse[0][0]
 
