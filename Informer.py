@@ -282,7 +282,7 @@ test_loader, x_test, y_test, x_test_mark, y_test_mark = tslib_data_loader(window
 value_loader, x_value, y_value, x_value_mark, y_value_mark = tslib_data_loader(window, length_size, batch_size, data_value, data_value_mark)
 
 
-device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+device = torch.device('cpu')
 num_epochs = 50  # 训练迭代次数
 learning_rate = 0.0001  # 学习率
 scheduler_patience = int(0.25 * num_epochs)  # 转换为整数  学习率调整的patience

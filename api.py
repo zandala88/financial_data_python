@@ -60,10 +60,10 @@ def tslib_data_loader(window, length_size, batch_size, data, data_mark):
     y_temp_mark = result_mark[:, -(length_size + int(window / 2)):]
 
     # 转换为Tensor和数据类型
-    x_temp = torch.tensor(x_temp).type(torch.float32)
-    x_temp_mark = torch.tensor(x_temp_mark).type(torch.float32)
-    y_temp = torch.tensor(y_temp).type(torch.float32)
-    y_temp_mark = torch.tensor(y_temp_mark).type(torch.float32)
+    x_temp = torch.tensor(x_temp, dtype=torch.float32, device=torch.device("cpu"))
+    x_temp_mark = torch.tensor(x_temp_mark, dtype=torch.float32, device=torch.device("cpu"))
+    y_temp = torch.tensor(y_temp, dtype=torch.float32, device=torch.device("cpu"))
+    y_temp_mark = torch.tensor(y_temp_mark, dtype=torch.float32, device=torch.device("cpu"))
 
     ds = TensorDataset(x_temp, y_temp, x_temp_mark, y_temp_mark)
     dataloader = DataLoader(ds, batch_size=batch_size, shuffle=True)

@@ -8,7 +8,7 @@ from timm.models.layers import trunc_normal_
 
 
 class LSTM(nn.Module):
-    def __init__(self, input_size, hidden_size, num_layers, batch_size, device="cuda"):
+    def __init__(self, input_size, hidden_size, num_layers, batch_size, device="cpu"):
         super().__init__()
         self.device = device
         self.input_size = input_size
