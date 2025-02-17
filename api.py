@@ -90,12 +90,27 @@ class PredictorServicer(predict_pb2_grpc.PredictorServicer):
             for dp in request.data
         ])
 
-        # 预处理
-        df["date"] = pd.to_datetime(df["date"])
-        data = df.drop(columns=["date"])
+        data_target = df['Target']
+        data = df[df.columns.drop('date')]
+
+        # 数据预处理
+        df_stamp = df[["date"]]
+        df_stamp["date"] = pd.to_datetime(df_stamp["date"])
+        data_stamp = time_features(df_stamp, timeenc=1, freq="B")
         data_inverse = scaler.fit_transform(np.array(data))
 
-        predicted_value = np.mean(data_inverse[:, -1]) * 100
+        test_loader, x_test, y_test, x_test_mark, y_test_mark = tslib_data_loader(30, 1, 32, data_inverse, data_stamp)
+
+        pred = model(x_test.to(device), x_test_mark.to(device), y_test.to(device), y_test_mark.to(device))
+        pred = pred.detach().cpu()
+
+        pred = pred[:, :, -1]
+        scaler.fit_transform(np.array(data_target).reshape(-1, 1))
+        pred_uninverse = scaler.inverse_transform(pred[:, -1:])
+
+
+        # 获取预测值
+        predicted_value = pred_uninverse[0][0]
 
         return predict_pb2.PredictResponse(val=predicted_value)
 
